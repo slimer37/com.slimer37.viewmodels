@@ -1,0 +1,19 @@
+{
+    "name": "Slimer37.Viewmodel.Rendering.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:78bd2ddd6e276394a9615c203e574844",
+        "GUID:75f0363e888976443a9a9aa05f08869b"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

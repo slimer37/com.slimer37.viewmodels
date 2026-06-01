@@ -1,0 +1,16 @@
+{
+  "name": "com.slimer37.viewmodels",
+  "displayName": "Viewmodels",
+  "version": "0.1.0",
+  "unity": "6000.3",
+  "unityRelease": "9f1",
+  "description": "Viewmodels for HDRP.",
+  "author": {
+    "name": "Alfred Roy Manongsong",
+    "url": "http://www.example.com",
+    "email": "example@email.com"
+  },
+  "changelogUrl": "https://example.com/changelog.html",
+  "documentationUrl": "https://example.com/",
+  "licensesUrl": "https://example.com/licensing.html"
+}
