@@ -13,7 +13,7 @@ namespace Slimer37.Viewmodel.Rendering
     [Serializable]
     internal class ViewmodelPass : CustomPass
     {
-        [SerializeField] private float _fieldOfView;
+        [SerializeField, Range(1e-5f, 179f)] private float _fieldOfView;
         [SerializeField, Min(0.001f)] private float _nearClipPlane = 0.01f;
         [SerializeField, Min(0.002f)] private float _farClipPlane = 100f;
         [SerializeField] private LayerMask _viewmodelMask;
