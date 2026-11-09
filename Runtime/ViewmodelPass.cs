@@ -1,22 +1,19 @@
 using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.Rendering.RendererUtils;
 using Object = UnityEngine.Object;
 
-[assembly: InternalsVisibleTo("Slimer37.Viewmodel.Rendering.Editor")]
-
 namespace Slimer37.Viewmodel.Rendering
 {
     [Serializable]
-    internal class ViewmodelPass : CustomPass
+    public class ViewmodelPass : CustomPass
     {
-        [SerializeField, Range(1e-5f, 179f)] private float _fieldOfView;
-        [SerializeField, Min(0.001f)] private float _nearClipPlane = 0.01f;
-        [SerializeField, Min(0.002f)] private float _farClipPlane = 100f;
-        [SerializeField] private LayerMask _viewmodelMask;
+        [field: SerializeField, Range(1e-5f, 179f)] public float FieldOfView { get; set; }
+        [field: SerializeField, Min(0.001f)] public float NearClipPlane { get; set; } = 0.01f;
+        [field: SerializeField, Min(0.002f)] public float FarClipPlane { get; set; } = 100f;
+        [field: SerializeField] public LayerMask ViewmodelMask { get; set; }
 
         protected override bool executeInSceneView => false;
 
@@ -78,10 +75,10 @@ namespace Slimer37.Viewmodel.Rendering
 
             _overlayViewmodelCamera.CopyFrom(camera);
 
-            _overlayViewmodelCamera.fieldOfView = _fieldOfView;
-            _overlayViewmodelCamera.nearClipPlane = _nearClipPlane;
-            _overlayViewmodelCamera.farClipPlane = Mathf.Max(_farClipPlane, _nearClipPlane + 0.001f);
-            _overlayViewmodelCamera.cullingMask = _viewmodelMask;
+            _overlayViewmodelCamera.fieldOfView = FieldOfView;
+            _overlayViewmodelCamera.nearClipPlane = NearClipPlane;
+            _overlayViewmodelCamera.farClipPlane = Mathf.Max(FarClipPlane, NearClipPlane + 0.001f);
+            _overlayViewmodelCamera.cullingMask = ViewmodelMask;
 
             if (!_overlayViewmodelCamera.TryGetCullingParameters(out ScriptableCullingParameters parameters)) return;
 
