@@ -625,17 +625,17 @@ MonoBehaviour:
     - rid: 4833557593249022189
       type: {class: ViewmodelPass, ns: Slimer37.Viewmodel.Rendering, asm: Slimer37.Viewmodel.Rendering}
       data:
-        m_Name: Custom Pass
+        m_Name: Viewmodel Pass
         enabled: 1
         targetColorBuffer: 0
         targetDepthBuffer: 0
         clearFlags: 0
         passFoldout: 0
         m_Version: 0
-        _fieldOfView: 90
-        _nearClipPlane: 0.01
-        _farClipPlane: 100
-        _viewmodelMask:
+        <FieldOfView>k__BackingField: 90
+        <NearClipPlane>k__BackingField: 0.01
+        <FarClipPlane>k__BackingField: 100
+        <ViewmodelMask>k__BackingField:
           serializedVersion: 2
           m_Bits: 32
 --- !u!4 &906637706
