@@ -21,6 +21,8 @@ namespace Slimer37.Viewmodel.Rendering
         private Camera _mainCamera;
 
         private ShaderTagId[] _forwardTags;
+        
+        private static readonly int s_AmbientOcclusionTexture = Shader.PropertyToID("_AmbientOcclusionTexture");
 
         private Camera GetCamera()
         {
@@ -98,6 +100,8 @@ namespace Slimer37.Viewmodel.Rendering
                     depthState = new DepthState(true, CompareFunction.LessEqual)
                 }
             };
+            
+            ctx.cmd.SetGlobalTexture(s_AmbientOcclusionTexture, TextureXR.GetBlackTexture());
 
             using (new CustomPassUtils.OverrideCameraRendering(ctx, _overlayViewmodelCamera))
             {
