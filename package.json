@@ -9,6 +9,11 @@
       "displayName": "Viewmodel Pass Demo Scene",
       "description": "Viewmodel Pass Demo",
       "path": "Samples/ViewmodelPassDemo"
+    },
+    {
+      "displayName": "FPS Demo Scene",
+      "description": "FPS Demo",
+      "path": "Samples/FPSDemo"
     }
   ],
   "author": {
