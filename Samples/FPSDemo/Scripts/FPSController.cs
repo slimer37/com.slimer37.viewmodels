@@ -4,9 +4,10 @@ using UnityEngine.InputSystem;
 public class FPSController : MonoBehaviour
 {
     [SerializeField] private Transform _camera;
-    [SerializeField] private float _sensitivity = 1f;
-    [SerializeField] private float _speed = 2f;
-    [SerializeField] private float _jumpHeight = 0.5f;
+    [SerializeField] private float _sensitivity = 0.1f;
+    [SerializeField] private float _maxSpeed = 5f;
+    [SerializeField] private float _acceleration = 30f;
+    [SerializeField] private float _jumpHeight = 0.75f;
     [SerializeField] private float _clampAngle = 80f;
     [SerializeField] private float _gravity = 9.81f;
     [SerializeField] private CharacterController _controller;
@@ -70,6 +71,11 @@ public class FPSController : MonoBehaviour
 
     private void Update()
     {
+        Vector2 moveInput = _moveAction.ReadValue<Vector2>().normalized;
+
+        Vector3 desiredDirection = new Vector3(moveInput.x, 0f, moveInput.y);
+        desiredDirection = Quaternion.AngleAxis(_camera.eulerAngles.y, Vector3.up) * desiredDirection;
+
         if (_controller.isGrounded)
         {
             _velocity.y = -1f;
@@ -78,16 +84,22 @@ public class FPSController : MonoBehaviour
             {
                 _velocity.y = GetInitialJumpVelocity(_jumpHeight, _gravity);
             }
+
+            float yVelocity = _velocity.y;
+            _velocity.y = 0f;
+            _velocity = Vector3.MoveTowards(_velocity, desiredDirection * _maxSpeed, _acceleration * Time.deltaTime);
+            _velocity.y = yVelocity;
         }
+        else
+        {
+            _velocity.y -= _gravity * Time.deltaTime;
 
-        _velocity.y -= _gravity * Time.deltaTime;
-
-        Vector2 moveInput = _moveAction.ReadValue<Vector2>().normalized * _speed;
-
-        _velocity.x = moveInput.x;
-        _velocity.z = moveInput.y;
-
-        _velocity = Quaternion.Euler(0f, _eulerAngles.y, 0f) * _velocity;
+            float yVelocity = _velocity.y;
+            _velocity.y = 0f;
+            _velocity += desiredDirection * (_acceleration * Time.deltaTime);
+            _velocity = Vector3.ClampMagnitude(_velocity, _maxSpeed);
+            _velocity.y = yVelocity;
+        }
 
         _controller.Move(_velocity * Time.deltaTime);
 
