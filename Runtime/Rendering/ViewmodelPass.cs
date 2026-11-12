@@ -5,7 +5,7 @@ using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.Rendering.RendererUtils;
 using Object = UnityEngine.Object;
 
-namespace Slimer37.Viewmodel.Rendering
+namespace Slimer37.Viewmodels.Rendering
 {
     [Serializable]
     public class ViewmodelPass : CustomPass
