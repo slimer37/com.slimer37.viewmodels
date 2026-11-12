@@ -1,6 +1,6 @@
 using UnityEditor.Rendering.HighDefinition;
 
-namespace Slimer37.Viewmodel.Rendering.Editor
+namespace Slimer37.Viewmodels.Rendering.Editor
 {
 #if UNITY_EDITOR
     [CustomPassDrawer(typeof(ViewmodelPass))]
