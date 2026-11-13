@@ -3,50 +3,30 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.Rendering.RendererUtils;
-using Object = UnityEngine.Object;
 
 namespace Slimer37.Viewmodels.Rendering
 {
     [Serializable]
-    public class ViewmodelPass : CustomPass
+    internal class ViewmodelPass : CustomPass
     {
-        [field: SerializeField, Range(1e-5f, 179f)] public float FieldOfView { get; set; }
-        [field: SerializeField, Min(0.001f)] public float NearClipPlane { get; set; } = 0.01f;
-        [field: SerializeField, Min(0.002f)] public float FarClipPlane { get; set; } = 100f;
-        [field: SerializeField] public LayerMask ViewmodelMask { get; set; }
+        public ViewmodelLayerRenderer Source { get; set; }
 
         protected override bool executeInSceneView => false;
 
         private Camera _overlayViewmodelCamera;
-        private Camera _mainCamera;
 
         private ShaderTagId[] _forwardTags;
-        
+
         private static readonly int s_AmbientOcclusionTexture = Shader.PropertyToID("_AmbientOcclusionTexture");
-
-        private Camera GetCamera()
-        {
-            foreach (CustomPassVolume customPassVolume in Object.FindObjectsByType<CustomPassVolume>())
-            {
-                if (customPassVolume.customPasses.Contains(this))
-                {
-                    return customPassVolume.targetCamera;
-                }
-            }
-
-            return null;
-        }
 
         protected override void Setup(ScriptableRenderContext renderContext, CommandBuffer cmd)
         {
-            _mainCamera = GetCamera();
-
             var cameraObject = new GameObject("Viewmodel Overlay Camera")
             {
                 hideFlags = HideFlags.HideAndDontSave
             };
 
-            cameraObject.transform.SetParent(_mainCamera.transform);
+            cameraObject.transform.SetParent(Source.TargetCamera.transform);
 
             _overlayViewmodelCamera = cameraObject.AddComponent<Camera>();
             _overlayViewmodelCamera.enabled = false;
@@ -73,14 +53,14 @@ namespace Slimer37.Viewmodels.Rendering
         {
             Camera camera = ctx.hdCamera.camera;
 
-            if (_overlayViewmodelCamera == null || camera != _mainCamera) return;
+            if (_overlayViewmodelCamera == null || camera != Source.TargetCamera) return;
 
             _overlayViewmodelCamera.CopyFrom(camera);
 
-            _overlayViewmodelCamera.fieldOfView = FieldOfView;
-            _overlayViewmodelCamera.nearClipPlane = NearClipPlane;
-            _overlayViewmodelCamera.farClipPlane = Mathf.Max(FarClipPlane, NearClipPlane + 0.001f);
-            _overlayViewmodelCamera.cullingMask = ViewmodelMask;
+            _overlayViewmodelCamera.fieldOfView = Source.FieldOfView;
+            _overlayViewmodelCamera.nearClipPlane = Source.NearClipPlane;
+            _overlayViewmodelCamera.farClipPlane = Mathf.Max(Source.FarClipPlane, Source.NearClipPlane + 0.001f);
+            _overlayViewmodelCamera.cullingMask = Source.ViewmodelMask;
 
             if (!_overlayViewmodelCamera.TryGetCullingParameters(out ScriptableCullingParameters parameters)) return;
 
@@ -100,7 +80,7 @@ namespace Slimer37.Viewmodels.Rendering
                     depthState = new DepthState(true, CompareFunction.LessEqual)
                 }
             };
-            
+
             ctx.cmd.SetGlobalTexture(s_AmbientOcclusionTexture, TextureXR.GetBlackTexture());
 
             using (new CustomPassUtils.OverrideCameraRendering(ctx, _overlayViewmodelCamera))
