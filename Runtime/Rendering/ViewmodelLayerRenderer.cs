@@ -16,6 +16,8 @@ namespace Slimer37.Viewmodels.Rendering
 
         private ViewmodelPass _viewmodelPass;
 
+        public static ViewmodelLayerRenderer _instance;
+
         private void ApplySettings()
         {
             _viewmodelPass.Source = this;
@@ -38,6 +40,9 @@ namespace Slimer37.Viewmodels.Rendering
             ViewmodelMask = LayerMask.GetMask("UI");
             TargetCamera = Camera.main;
 
+            // Prevent volume assignment if found existing component
+            if (TryGetComponent(out ViewmodelLayerRenderer _)) return;
+
             _volume ??= GetComponent<CustomPassVolume>();
 
             RestorePassFromVolume();
@@ -45,6 +50,29 @@ namespace Slimer37.Viewmodels.Rendering
 
         private void Awake()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying && FindObjectsByType<ViewmodelLayerRenderer>().Length > 1)
+            {
+                UnityEditor.EditorApplication.delayCall += () =>
+                {
+                    UnityEditor.EditorUtility.DisplayDialog("Cannot add",
+                        $"Can't add more than one {nameof(ViewmodelLayerRenderer)} to the scene.", "OK");
+
+                    DestroyImmediate(this);
+                };
+
+                return;
+            }
+#endif
+
+            if (_instance && _instance != this)
+            {
+                Debug.LogWarning($"Only 1 {nameof(ViewmodelLayerRenderer)} allowed in scene.");
+                return;
+            }
+
+            _instance = this;
+
             if (_volume) return;
 
             _volume = gameObject.AddComponent<CustomPassVolume>();
