@@ -1,0 +1,14 @@
+{
+    "name": "Slimer37.Viewmodels",
+    "rootNamespace": "Slimer37.Viewmodels",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
